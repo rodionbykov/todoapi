@@ -1,5 +1,9 @@
 component rest="true" restPath="/todos"{
 
+    remote any function hello() httpMethod="OPTIONS" {
+        return "Hello, world!";
+    }
+
     remote any function getToDos() httpMethod="GET" {
         var todos = EntityLoad("todo");
 
