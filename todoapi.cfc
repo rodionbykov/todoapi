@@ -1,7 +1,12 @@
 component rest="true" restPath="/todos"{
 
+
     remote any function hello() httpMethod="OPTIONS" {
-        return "Hello, world!";
+        return "";
+    }
+
+	remote any function hello2(numeric id restArgSource="PATH") restPath="/{id}" httpMethod="OPTIONS" {
+        return "";
     }
 
     remote any function getToDos() httpMethod="GET" {
@@ -10,19 +15,19 @@ component rest="true" restPath="/todos"{
         return QueryToArrayOfStructures(EntityToQuery(todos));
     }
 
-    remote any function addToDo(string description restArgSource="FORM") httpMethod="POST" {
-
-        param name="ARGUMENTS.description" default="";
+    remote any function addToDo() httpMethod="POST" {
 
         var todo = EntityNew("todo");
-        todo.setDescription(ARGUMENTS.description);
+        
+		var data = DeserializeJSON(GetHttpRequestData().content);
+		todo.setDescription(data.description);
         todo.setIsDone(0);
         EntitySave(todo);
 
         return QueryToArrayOfStructures(EntityToQuery(todo))[1];
     }
 
-    remote any function toggleToDoDone(string id restArgSource="PATH") httpMethod="PUT" restPath="/{id}" {
+    remote any function toggleToDoDone(string id restArgSource="PATH") httpMethod="PATCH" restPath="/{id}" {
 
         param name="ARGUMENTS.id" default="0";
 
