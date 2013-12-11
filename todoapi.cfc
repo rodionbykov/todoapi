@@ -15,11 +15,11 @@ component rest="true" restPath="/todos"{
         return QueryToArrayOfStructures(EntityToQuery(todos));
     }
 
-    remote any function addToDo() httpMethod="POST" {
+    remote any function addToDo(string jsondata) httpMethod="POST" {
 
         var todo = EntityNew("todo");
         
-		var data = DeserializeJSON(GetHttpRequestData().content);
+		var data = deserializeJSON(ARGUMENTS.jsondata);
 		todo.setDescription(data.description);
         todo.setIsDone(0);
         EntitySave(todo);
